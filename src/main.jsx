@@ -1,15 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import { ChakraProvider } from '@chakra-ui/react'
-import { theme } from './theme.js'
+import { ChakraProvider } from '@chakra-ui/react';
+import { theme } from './theme.js';
 
-import { App } from './App.jsx'
+import { App } from './App.jsx';
+import { ToDoProvider } from './contexts/TodoContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <App />
+      <ToDoProvider>
+        <App />
+      </ToDoProvider>
     </ChakraProvider>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

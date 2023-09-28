@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useContext } from 'react';
+
+import { ToDoContext } from './contexts/TodoContext';
 
 import { DeleteIcon, MoonIcon, StarIcon, SunIcon } from '@chakra-ui/icons';
 import {
@@ -15,57 +17,20 @@ import {
 } from '@chakra-ui/react';
 
 export function App() {
-  const todayDate = new Date().toJSON().slice(0, 10);
-  const [toDoInput, setToDoInput] = useState('');
-  const [toDoDate, setToDoDate] = useState(todayDate);
-  const [toDoList, setToDoList] = useState([]);
-  const [toDoListChecked, setToDoListChecked] = useState([]);
+  const {
+    toDoInput,
+    setToDoInput,
+    toDoList,
+    toDoListChecked,
+    itemStatus,
+    removeItem,
+    addItem,
+    todayDate,
+    toDoDate,
+    setToDoDate,
+  } = useContext(ToDoContext);
 
   const { colorMode, toggleColorMode } = useColorMode();
-
-  const addItem = (item, date) => {
-    if (item && date) {
-      setToDoList([...toDoList, { item: item, date: date }]);
-      setToDoInput('');
-    }
-  };
-
-  const removeItem = (item, list) => {
-    if (list === toDoList) {
-      let newTodo = [...toDoList];
-      let exists = toDoList.find((toFind) => toFind.item === item);
-
-      if (exists) {
-        newTodo = newTodo.filter((item) => item !== exists);
-        setToDoList(newTodo);
-      }
-    } else if (list === toDoListChecked) {
-      let newTodo = [...toDoListChecked];
-      let exists = toDoListChecked.find((toFind) => toFind.item === item);
-
-      if (exists) {
-        newTodo = newTodo.filter((item) => item !== exists);
-        setToDoListChecked(newTodo);
-      }
-    }
-  };
-
-  const itemStatus = (item, date, status, list) => {
-    if (status) {
-      removeItem(item, list);
-      setToDoListChecked([...toDoListChecked, { item: item, date: date }]);
-    } else {
-      addItem(item, date);
-
-      let newTodo = [...toDoListChecked];
-      let exists = toDoListChecked.find((toFind) => toFind.item === item);
-
-      if (exists) {
-        newTodo = newTodo.filter((item) => item !== exists);
-        setToDoListChecked(newTodo);
-      }
-    }
-  };
 
   return (
     <Flex
@@ -96,7 +61,7 @@ export function App() {
             <Input
               placeholder="Select Date"
               min={todayDate}
-              value={todayDate}
+              value={toDoDate}
               type="date"
               width={'250px'}
               onChange={(e) => setToDoDate(e.target.value)}
@@ -114,7 +79,7 @@ export function App() {
           </Flex>
         </form>
 
-        {toDoList.length ? (
+        {toDoList?.length ? (
           <Box marginTop={'20px'}>
             {toDoList.map((todoItem, key) => {
               return (
@@ -136,8 +101,8 @@ export function App() {
                       </Checkbox>
                       <small
                         style={{
-                          'padding-left': '23px',
-                          'font-size': '.6875rem',
+                          paddingLeft: '23px',
+                          fontSize: '.6875rem',
                         }}
                       >
                         to do until {todoItem.date}
@@ -155,7 +120,7 @@ export function App() {
               );
             })}
           </Box>
-        ) : toDoListChecked.length > toDoList.length ? (
+        ) : toDoListChecked?.length > toDoList?.length ? (
           <Flex
             gap={'5px'}
             flexDirection={'column'}
@@ -167,7 +132,7 @@ export function App() {
           </Flex>
         ) : null}
 
-        {toDoListChecked.length ? (
+        {toDoListChecked?.length ? (
           <>
             <Box marginTop={'20px'} className="items items-checked">
               <Heading size={'sm'} marginBottom={'5px'}>
