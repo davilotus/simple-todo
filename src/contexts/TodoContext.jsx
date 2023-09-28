@@ -58,7 +58,7 @@ export const ToDoProvider = ({ children }) => {
   }, [todayDate]);
 
   useEffect(() => {
-    setToDoDate(toDoDate);
+    setToDoDate((date) => date);
   }, [toDoDate]);
 
   return (
